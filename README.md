@@ -6,4 +6,9 @@
 * **Exercises/**: Jupyter notebooks for each exercise
 * **Graphs/**: Notebooks demonstrating LangGraph patterns
 
-*The agents are run using local models and the models folder has been excluded and it is easy to download from Hugging Face*
+## **Files** ##
+* **typeAnnotations.py** just shows annotations that are crucial for the lessons
+
+*The agents are run using local models and the models folder has been excluded and it is easy to download from Hugging Face. Models used include:*
+* *llama-2-7b-chat* for a bit complex tasks
+* *Phi-3-mini-4k-instruct-q4* for simple tasks

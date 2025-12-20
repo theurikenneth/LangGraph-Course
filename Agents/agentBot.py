@@ -1,30 +1,34 @@
 from typing import TypedDict, List
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, AIMessage
 from langgraph.graph import StateGraph, START, END
-from llama_cpp import Llama
+from langchain_community.llms import LlamaCpp
 
-llm = Llama(
+llm = LlamaCpp(
     model_path="./models/Phi-3-mini-4k-instruct-q4.gguf",
     n_ctx=2048,
     n_threads=8,   # set to number of CPU cores
     n_batch=256,
-    verbose=False
+    verbose=False,
+    max_tokens=512,
+    temperature=0.7,
+    stop=["<|end|>", "<|user|>"]
 )
 
 class AgentState(TypedDict):
     messages: List[HumanMessage]
 
 def process(state: AgentState) -> AgentState:
-    prompt = "\n".join([m.content for m in state["messages"]])
-
-    output = llm(
-        prompt,
-        max_tokens=256,
-        temperature=0.7
-    )
-
-    response = output["choices"][0]["text"]
-    print(f"\nAI: {response}\n")
+    # Get the last message content
+    user_message = state["messages"][-1].content
+    
+    # Format for Phi-3
+    prompt = f"<|system|>\nYou are a helpful AI assistant.<|end|>\n<|user|>\n{user_message}<|end|>\n<|assistant|>\n"
+    
+    # LlamaCpp.invoke() returns a string
+    response = llm.invoke(prompt)
+    response = response.strip()
+    
+    print(f"\nAI: {response}")
 
     return state
 
