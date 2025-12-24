@@ -47,7 +47,7 @@ def process(state: AgentState) -> AgentState:
     # Append AI response to messages
     state["messages"].append(AIMessage(content=response))
     
-    print(f"\nAI: {response}")
+    print(f"\nAI: {response}\n")
 
     return state
 
